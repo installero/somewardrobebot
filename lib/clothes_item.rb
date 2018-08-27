@@ -3,33 +3,28 @@
 class ClothesItem
   # Напишем геттеры для удобства использования класса, чтобы мы могли достать
   # любую переменную экземпляра просто вызвав clothes_item.title
-  attr_reader :title, :type, :temperature
+  attr_reader :title, :type, :min_temp, :max_temp
 
   # В конструктор передаем имя файла, в котором лежит описание вещи в формате
   #
   # <Название шмотки>
   # <Тип шмотки>
   # <Диапазон температур>
-  def initialize(file)
-    content = File.read(file, encoding: 'UTF-8')
-    hash = JSON.parse(content, symbolize_names: true)
-
+  def initialize(hash)
     @title = hash[:title]
     @type = hash[:type]
-
-    temp_min, temp_max = hash[:temperature_range].delete('() ').split(',')
-
-    @temperature_range = (temp_min.to_i..temp_max.to_i)
+    @min_temp = hash[:min_temp]
+    @max_temp = hash[:max_temp]
   end
 
   # Метод suits_for_temperature? отвечает на вопрос, подходит эта вещь для
   # той температуры, которую мы передадим ему в качестве паарметра
   def suits_for?(temperature)
-    @temperature_range.include?(temperature)
+    temperature.between?(@min_temp, @max_temp)
   end
 
   # Метод to_s просто выводит все параметры элемента одежды одной строкой
   def to_s
-    "#{@title}, #{@type}, #{@temperature_range}"
+    "#{@title}, #{@type} от #{@min_temp} до #{@max_temp}"
   end
 end

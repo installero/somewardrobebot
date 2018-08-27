@@ -16,7 +16,7 @@ CITY = 'Москва'
 
 # Создаем новый экземпляр класса Wardrobe, передавая методу класса (статическому
 # методу) from_dir путь к папке со шмотками.
-wardrobe = Wardrobe.from_dir(File.dirname(__FILE__) + '/data')
+wardrobe = Wardrobe.new
 
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
